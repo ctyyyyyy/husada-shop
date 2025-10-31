@@ -92,7 +92,7 @@
           <td>${b.hargaBeli.toLocaleString()}</td>
           <td>${b.jumlah}</td>
           <td>${b.modal.toFixed(0).toLocaleString()}</td>
-          <td>${b.hargaJual ? b.hargaJual.toLocaleString() : "-"}</td>
+          <td><b>${b.hargaJual ? b.hargaJual.toLocaleString() : "-"}</b></td>
           <td>${b.hargaJual ? b.untung.toFixed(0).toLocaleString() : "-"}</td>
           <td>
             <button class="action" onclick="editBarang(${i})">Edit</button>
@@ -126,4 +126,5 @@
   </script>
 
 </body>
+
 </html>
