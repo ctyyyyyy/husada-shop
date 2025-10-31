@@ -3,136 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daftar Harga Asongan & ATK</title>
+  <title>Daftar Harga Barang Asongan & ATK</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 </head>
 <body>
-
-  <h1>Daftar Harga Barang Asongan & ATK</h1>
+  <h1>📦 Daftar Harga Barang Asongan & ATK</h1>
   <a href="index.html" class="btn-back">⬅ Kembali ke Menu Utama</a>
 
-  <form id="formBarang">
-    <input type="text" id="namaBarang" placeholder="Nama Barang" required>
-    <input type="text" id="merek" placeholder="Merek (opsional)">
-    <input type="number" id="hargaBeli" placeholder="Harga Beli (Rp)" required>
-    <input type="number" id="jumlahIsi" placeholder="Jumlah Isi" required>
-    <input type="number" id="hargaJual" placeholder="Harga Jual (Rp)">
-    <button type="submit" class="action">Tambah Barang</button>
+  <form id="itemForm">
+    <input type="text" id="nama" placeholder="Nama Barang" required>
+    <input type="number" id="harga" placeholder="Harga (Rp)" required>
+    <button type="submit" class="action">Tambah</button>
   </form>
 
-  <table id="tabelBarang">
-    <tr>
-      <th>No</th>
-      <th>Nama Barang</th>
-      <th>Merek</th>
-      <th>Harga Beli (Rp)</th>
-      <th>Jumlah Isi</th>
-      <th>Modal / pcs (Rp)</th>
-      <th>Harga Jual (Rp)</th>
-      <th>Keuntungan / pcs (Rp)</th>
-      <th>Aksi</th>
-    </tr>
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>Nama Barang</th>
+        <th>Harga (Rp)</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
   </table>
 
   <script>
-    let barangList = JSON.parse(localStorage.getItem('barangList')) || [];
-    let editIndex = -1;
+    // === KONFIGURASI FIREBASE ===
+    const firebaseConfig = {
+      apiKey: "GANTI_DENGAN_API_KEY_KAMU",
+      authDomain: "GANTI_DENGAN_AUTH_DOMAIN_KAMU",
+      databaseURL: "GANTI_DENGAN_DATABASE_URL_KAMU",
+      projectId: "GANTI_DENGAN_PROJECT_ID_KAMU",
+      storageBucket: "GANTI_DENGAN_STORAGE_BUCKET_KAMU",
+      messagingSenderId: "GANTI_DENGAN_SENDER_ID_KAMU",
+      appId: "GANTI_DENGAN_APP_ID_KAMU"
+    };
 
-    document.getElementById('formBarang').addEventListener('submit', function(e) {
+    // Inisialisasi Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database(app);
+
+    // === AMBIL DATA DAN TAMPILKAN ===
+    const tableBody = document.querySelector("#dataTable tbody");
+    const form = document.getElementById("itemForm");
+
+    // Tambah data
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
-
-      const nama = document.getElementById('namaBarang').value.trim();
-      const merek = document.getElementById('merek').value.trim() || "-";
-      const hargaBeli = parseFloat(document.getElementById('hargaBeli').value);
-      const jumlah = parseFloat(document.getElementById('jumlahIsi').value);
-      const hargaJual = parseFloat(document.getElementById('hargaJual').value) || 0;
-
-      const modal = hargaBeli / jumlah;
-      const untung = hargaJual ? (hargaJual - modal) : 0;
-
-      const data = { nama, merek, hargaBeli, jumlah, modal, hargaJual, untung };
-
-      if (editIndex === -1) {
-        barangList.push(data);
-      } else {
-        barangList[editIndex] = data;
-        editIndex = -1;
-      }
-
-      // urutkan A–Z berdasarkan nama barang
-      barangList.sort((a, b) => a.nama.localeCompare(b.nama, 'id', { sensitivity: 'base' }));
-
-      localStorage.setItem('barangList', JSON.stringify(barangList));
-      this.reset();
-      renderTable();
+      const nama = document.getElementById("nama").value;
+      const harga = document.getElementById("harga").value;
+      const newRef = db.ref("asongan").push();
+      newRef.set({ nama, harga });
+      form.reset();
     });
 
-    function renderTable() {
-      const tabel = document.getElementById('tabelBarang');
-      tabel.innerHTML = `
-        <tr>
-          <th>No</th>
-          <th>Nama Barang</th>
-          <th>Merek</th>
-          <th>Harga Beli (Rp)</th>
-          <th>Jumlah Isi</th>
-          <th>Modal / pcs (Rp)</th>
-          <th>Harga Jual (Rp)</th>
-          <th>Keuntungan / pcs (Rp)</th>
-          <th>Aksi</th>
-        </tr>
-      `;
-
-      barangList.forEach((b, i) => {
-        const row = tabel.insertRow();
-        row.innerHTML = `
-          <td>${i + 1}</td>
-          <td style="background-color: #c7c6c1; font-size:20px;">${b.nama}</td>
-          <td style="background-color: #d6cfc7; font-size:20px;">${b.merek || "-"}</td>
-          <td>${b.hargaBeli.toLocaleString()}</td>
-          <td>${b.jumlah}</td>
-          <td>${b.modal.toFixed(0).toLocaleString()}</td>
-          <td style="background-color: #bebd88; font-size:35px;"><b>${b.hargaJual ? b.hargaJual.toLocaleString() : "-"}</b></td>
-          <td>${b.hargaJual ? b.untung.toFixed(0).toLocaleString() : "-"}</td>
-          <td>
-            <button class="action" onclick="editBarang(${i})">Edit</button>
-            <button class="delete" onclick="hapusBarang(${i})">Hapus</button>
-          </td>
+    // Baca data realtime
+    db.ref("asongan").on("value", (snapshot) => {
+      tableBody.innerHTML = "";
+      snapshot.forEach((child) => {
+        const data = child.val();
+        const row = `
+          <tr>
+            <td>${data.nama}</td>
+            <td>${data.harga}</td>
+            <td><button class="delete" onclick="hapusData('${child.key}')">Hapus</button></td>
+          </tr>
         `;
+        tableBody.innerHTML += row;
       });
-    }
+    });
 
-    function editBarang(index) {
-      const b = barangList[index];
-      document.getElementById('namaBarang').value = b.nama;
-      document.getElementById('merek').value = b.merek !== "-" ? b.merek : "";
-      document.getElementById('hargaBeli').value = b.hargaBeli;
-      document.getElementById('jumlahIsi').value = b.jumlah;
-      document.getElementById('hargaJual').value = b.hargaJual || "";
-      editIndex = index;
+    // Hapus data
+    function hapusData(id) {
+      db.ref("asongan/" + id).remove();
     }
-
-    function hapusBarang(index) {
-      if (confirm('Yakin ingin menghapus barang ini?')) {
-        barangList.splice(index, 1);
-        localStorage.setItem('barangList', JSON.stringify(barangList));
-        renderTable();
-      }
-    }
-
-    // urutkan A-Z saat pertama kali dibuka
-    barangList.sort((a, b) => a.nama.localeCompare(b.nama, 'id', { sensitivity: 'base' }));
-    renderTable();
   </script>
-
 </body>
-
 </html>
-
-
-
-
-
-
-
-
