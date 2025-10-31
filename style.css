@@ -88,21 +88,7 @@ td:nth-child(3) {
 }
 
 /* Kolom warna khusus */
-td:nth-child(2) {
-  background-color: #c7c6c1;
-  font-size: 20px;
-}
 
-td:nth-child(3) {
-  background-color: #d6cfc7;
-  font-size: 20px;
-}
-
-td:nth-child(7) {
-  background-color: #bebd88;
-  font-size: 35px;
-  font-weight: bold;
-}
 
 /* === Responsif untuk HP === */
 @media screen and (max-width: 768px) {
