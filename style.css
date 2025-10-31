@@ -1,91 +1,140 @@
+/* === Tampilan Umum === */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f7f7f7;
+  background-color: #f9f8f4;
   margin: 0;
   padding: 20px;
   text-align: center;
 }
 
 h1 {
-  margin-bottom: 10px;
+  color: #444;
+  margin-bottom: 20px;
+  font-size: 28px;
 }
 
-.menu {
-  margin-top: 30px;
-}
-
-.btn, .btn-back {
+/* Tombol kembali */
+.btn-back {
   display: inline-block;
-  text-decoration: none;
-  background-color: #007BFF;
+  margin-bottom: 20px;
+  background-color: #555;
   color: white;
-  padding: 10px 20px;
-  margin: 10px;
-  border-radius: 5px;
-}
-
-.btn:hover, .btn-back:hover {
-  background-color: #0056b3;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 16px;
 }
 
 form {
-  background: white;
-  padding: 15px;
-  margin: 20px auto;
-  max-width: 800px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
-input {
-  margin: 5px;
-  padding: 8px;
-  width: 130px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-table {
-  width: 95%;
-  max-width: 900px;
-  margin: 0 auto;
-  border-collapse: collapse;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-th, td {
+/* Input dan tombol */
+input, button {
   padding: 10px;
-  border: 1px solid #ddd;
-  text-align: center;
-}
-
-th {
-  background-color: #f0f0f0;
+  font-size: 16px;
+  margin: 5px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
 }
 
 button.action {
-  background-color: #28a745;
+  background-color: #4CAF50;
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 3px;
+  cursor: pointer;
+}
+
+button.delete {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
   cursor: pointer;
 }
 
 button.action:hover {
-  background-color: #218838;
-}
-
-button.delete {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 3px;
-  cursor: pointer;
+  background-color: #45a049;
 }
 
 button.delete:hover {
-  background-color: #a71d2a;
+  background-color: #d63a2c;
+}
+
+/* === Tabel === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+th {
+  background-color: #ded9cc;
+  font-weight: bold;
+}
+
+/* Huruf besar untuk Nama Barang & Merek */
+td:nth-child(2),
+td:nth-child(3) {
+  text-transform: uppercase;
+}
+
+/* Kolom warna khusus */
+td:nth-child(2) {
+  background-color: #c7c6c1;
+  font-size: 20px;
+}
+
+td:nth-child(3) {
+  background-color: #d6cfc7;
+  font-size: 20px;
+}
+
+td:nth-child(7) {
+  background-color: #bebd88;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+/* === Responsif untuk HP === */
+@media screen and (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  input, button {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 6px;
+  }
+
+  .btn-back {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+  }
 }
